@@ -34,10 +34,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to generate audio" }, { status: response.status })
     }
 
-    // Get the audio data as an array buffer
     const audioBuffer = await response.arrayBuffer()
 
-    // Return the audio data with the appropriate content type
     return new NextResponse(audioBuffer, {
       headers: {
         "Content-Type": "audio/mpeg",
