@@ -46,7 +46,7 @@ Ensure you have the following installed:
    ```
    or
    ```sh
-   yarn install
+   bun install
    ```
 
 3. Set up environment variables:
