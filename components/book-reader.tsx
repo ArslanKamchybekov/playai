@@ -15,8 +15,8 @@ import { voices } from "@/lib/voices"
 import { Loader2, Upload } from "lucide-react"
 
 export function BookReader() {
-  const [file, setFile] = useState<File | null>(null)
-  const [pdfData, setPdfData] = useState<Uint8Array | null>(null)
+  const [file, setFile] = useState<File | null>(null);
+  const [pdfData, setPdfData] = useState<Uint8Array | null>(null);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [pageText, setPageText] = useState("")
@@ -28,30 +28,42 @@ export function BookReader() {
   const pdfRef = useRef<any>(null)
 
   useEffect(() => {
-    console.log("currentPage", currentPage, "pdfData", pdfData)
-    if (pdfData && pdfRef.current) {
-      extractPageText()
+    if (file && currentPage === 1) {
+      setTimeout(() => {
+        extractPageText();
+      }, 100);
     }
-  }, [currentPage, pdfData])
-
+  }, [file]);
+  
+  useEffect(() => {
+    if (file && pdfRef.current) {
+      extractPageText();
+    }
+  }, [currentPage, file]);
+  
   const handleFileChange = async (file: File) => {
-    setFile(file)
-    const arrayBuffer = await file.arrayBuffer()
-    setPdfData(new Uint8Array(arrayBuffer))
-    setCurrentPage(1)
-    setAudioUrl(null)
-  }
-
+    setFile(file);
+    const arrayBuffer = await file.arrayBuffer();
+    setPdfData(new Uint8Array(arrayBuffer));
+    setCurrentPage(1);
+    setAudioUrl(null);
+    setPageText(""); 
+    setTimeout(() => {
+      extractPageText();
+    }, 200);
+  };
+  
   const extractPageText = async () => {
-    try {
-      const text = await extractTextFromPDFPage(pdfData as Uint8Array, currentPage)
-      console.log("text", text)
-      setPageText(text)
-    } catch (error) {
-      console.error("Error extracting text:", error)
-      setPageText("Error extracting text from this page.")
-    }
-  }
+      if (!file) return;
+      
+      try {
+        const text = await extractTextFromPDFPage(file, currentPage);
+        setPageText(text);
+      } catch (error) {
+        console.error("Error extracting text:", error);
+        setPageText("Error extracting text from this page.");
+      }
+    };
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)

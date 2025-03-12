@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import * as pdfjs from "pdfjs-dist"
 
-// Ensure the worker is loaded
 if (typeof window !== "undefined" && !pdfjs.GlobalWorkerOptions.workerSrc) {
   pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`
 }
@@ -128,7 +127,7 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
 
     return (
       <div className="flex flex-col h-full" ref={ref}>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="icon" onClick={handlePreviousPage} disabled={currentPage <= 1}>
               <ChevronLeft className="h-4 w-4" />
@@ -155,7 +154,7 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
             </Button>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mt-2 sm:mt-0">
             <Button variant="outline" size="sm" onClick={handleZoomOut} disabled={scale <= 0.5}>
               -
             </Button>
@@ -167,7 +166,7 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
         </div>
 
         <div className="flex-grow overflow-auto flex justify-center bg-slate-100 dark:bg-slate-800 rounded-lg">
-          <canvas ref={canvasRef} className="shadow-lg" />
+          <canvas ref={canvasRef} className="shadow-lg w-full max-w-full" />
         </div>
       </div>
     )
